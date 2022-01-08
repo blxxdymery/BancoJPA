@@ -1,0 +1,9 @@
+Entidad\Operacion.class
+Test\GestionBanco.class
+DAO\InteresadoDAO.class
+Entidad\Cliente.class
+Entidad\Cuenta.class
+DAO\CuentaDAO.class
+DAO\OperacionDAO.class
+DAO\ClienteDAO.class
+Entidad\Interesado.class
