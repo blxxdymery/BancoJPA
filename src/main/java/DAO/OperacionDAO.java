@@ -5,7 +5,6 @@
  */
 package DAO;
 
-import Entidad.Cliente;
 import Entidad.Cuenta;
 import Entidad.Operacion;
 import java.util.List;
@@ -63,5 +62,15 @@ public class OperacionDAO {
         tx.commit();
         log.debug("Objeto eliminado correctamente " + operacion);
         em.close(); 
+    }
+    
+    public List<Operacion> seleccionarTipoOperacion(String dni, String tipo){
+        EntityManager em = emf.createEntityManager();
+        Query q1 = em.createNamedQuery("Operacion.selectOperacionesTipo");
+        q1.setParameter(1, dni);
+        q1.setParameter(2, tipo);
+        List<Operacion> listaOperacionesCliente = (List<Operacion>) q1.getResultList();
+        em.close();
+        return listaOperacionesCliente;
     }
 }

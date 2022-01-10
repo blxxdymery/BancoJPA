@@ -11,6 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
@@ -21,7 +22,10 @@ import javax.persistence.Table;
  */
 @Entity(name="operaciones")
 @Table (name="operaciones")
-@NamedQuery(name = "Operacion.selectOperaciones",query="SELECT o FROM operaciones o")
+@NamedQueries({
+    @NamedQuery(name = "Operacion.selectOperacionesTipo", query = "SELECT o FROM operaciones o inner join cuentas c on o.numero_cuenta = c.numero WHERE c.dni_cliente = ?1 and o.tipo = ?2"),
+    @NamedQuery(name = "Operacion.selectOperaciones",query="SELECT o FROM operaciones o")
+})
 public class Operacion implements Serializable{
     @Id
     private int id;

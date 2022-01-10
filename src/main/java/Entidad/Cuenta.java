@@ -39,11 +39,22 @@ public class Cuenta implements Serializable{
 
     public Cuenta(String dni_cliente) {
         numero = generarNumero();
-        alias = "cuentaBase";
+        alias = "cuentaPrincipal";
         saldoActual = 10;
         saldoMinimo = 5;
         this.dni_cliente = dni_cliente;
     }
+
+    public Cuenta(String alias, double saldoActual, String dni_cliente) {
+        numero = generarNumero();
+        this.alias = alias;
+        this.saldoActual = saldoActual;
+        saldoRetenido = 0;
+        saldoMinimo = 5;
+        this.dni_cliente = dni_cliente;
+    }
+    
+    
 
     public Cuenta(String alias, double saldoActual, double saldoRetenido, double saldoMinimo, String dni_cliente) {
         numero = generarNumero();
@@ -107,8 +118,7 @@ public class Cuenta implements Serializable{
         return "Cuenta{" + "numero=" + numero + ", alias=" + alias + ", saldoActual=" + saldoActual + ", saldoRetenido=" + saldoRetenido + ", saldoMinimo=" + saldoMinimo + ", dni_cliente=" + dni_cliente + '}';
     }
     
-    //HACER UN METODO PARA GENERAR UN NUMERO RANDOM DE 20 CIFRAS
-    
+    //HACER UN METODO PARA GENERAR UN NUMERO RANDOM DE 20 CIFRAS    
     public String generarNumero() {
         char[] chars = "0123456789".toCharArray();
         StringBuilder sb = new StringBuilder(20);

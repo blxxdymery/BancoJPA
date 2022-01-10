@@ -103,8 +103,9 @@ public class ClienteDAO {
     //DA ERROR EL PARAMETRO ?????????
     public List<String> saldoMayor(double saldo) {
         EntityManager em = emf.createEntityManager();
-        Query q2 = em.createNamedQuery("Cliente.clientesSaldoMayor");
-        List<String> listaNombres = (List<String>) q2.getResultList();
+        Query q1 = em.createNamedQuery("Cliente.clientesSaldoMayor");
+        q1.setParameter(1, saldo);
+        List<String> listaNombres = (List<String>) q1.getResultList();
         em.close();
         return listaNombres;
     }

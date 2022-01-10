@@ -61,10 +61,11 @@ public class CuentaDAO {
         em.close(); 
     }
     
-    public double mediaSaldoCliente(Cliente cliente) {
+    public double mediaSaldoCliente(String dni) {
         EntityManager em = emf.createEntityManager();
-        Query q2 = em.createNamedQuery("Cuenta.mediaSaldoCliente");
-        double saldoMedio = (double) q2.getFirstResult();
+        Query q1 = em.createNamedQuery("Cuenta.mediaSaldoCliente");
+        q1.setParameter(1, dni);
+        double saldoMedio = (double) q1.getFirstResult();
         em.close();
         return saldoMedio;
     }
