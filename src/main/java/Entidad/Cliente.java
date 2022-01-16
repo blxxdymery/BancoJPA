@@ -18,7 +18,7 @@ import javax.persistence.*;
     //@NamedQuery(name = "Cliente.insertCliente",query="INSERT c INTO clientes c (c.dni, c.nombre, c.apellidos, c.fechaNacimiento, c.email) VALUES (:?1,:?2,:?3,:?4,:?5)")
     @NamedQuery(name = "Cliente.selectCliente",query="SELECT c FROM clientes c"),
     //QUERY 3: Nombre de todos los clientes con cuentas que tienen un saldo mayor a uno determinado
-    @NamedQuery(name = "Cliente.clientesSaldoMayor", query = "SELECT cli.nombre FROM clientes cli INNER JOIN cuentas cue ON cli.dni = cue.dni_cliente WHERE cue.saldoActual > ?1")
+    @NamedQuery(name = "Cliente.clientesSaldoMayor", query = "SELECT distinct cli.nombre FROM clientes cli INNER JOIN cuentas cue ON cli.dni = cue.dni_cliente WHERE cue.saldoActual > ?1")
 })
         
 @Table (name="clientes")
@@ -131,7 +131,7 @@ public class Cliente implements Serializable{ //extends Interesado ???? @id ene 
     }
     
     public static void generarPassword(Cliente cliente){
-        int num = (int) (Math.random()*100000);
+        int num = (int) (Math.random()*100000000);
         String pass = String.valueOf(num);
         cliente.setPassword(pass);
     }

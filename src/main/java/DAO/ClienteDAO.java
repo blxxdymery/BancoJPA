@@ -100,7 +100,7 @@ public class ClienteDAO {
         em.close(); 
     }
     
-    //DA ERROR EL PARAMETRO ?????????
+    //FILTRAR PARA QUE NO SE REPITAN LOS NOMBRES
     public List<String> saldoMayor(double saldo) {
         EntityManager em = emf.createEntityManager();
         Query q1 = em.createNamedQuery("Cliente.clientesSaldoMayor");

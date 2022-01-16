@@ -14,6 +14,7 @@ import javax.persistence.*;
 
 @NamedQueries({
     @NamedQuery(name = "Cuenta.selectCuentas",query="SELECT c FROM cuentas c"),
+    @NamedQuery(name = "Cuenta.selectCuentasCliente",query="SELECT c FROM cuentas c WHERE c.dni_cliente=?1"),
     //QUERY 2 = Saldo medio de las cuentas para un cliente determinado
     @NamedQuery(name = "Cuenta.mediaSaldoCliente", query = "SELECT AVG(c.saldoActual) FROM cuentas c WHERE c.dni_cliente=?1") 
 })

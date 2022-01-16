@@ -35,7 +35,7 @@ public class GestionBanco {
         Operacion operacion = null;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        Date date = new Date();
+        
 
         //GET FECHA ACTUAL PARA OPERACIONES
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -68,7 +68,6 @@ public class GestionBanco {
                     break;
                 case 2:
                     //  query 2
-
                     String dni = "";
 
                     System.out.println("-LISTADO DE CLIENTES:");
@@ -90,7 +89,7 @@ public class GestionBanco {
                     System.out.println();
                     break;
                 case 3:
-                    //  query 3 DA ERROR
+                    //  Se repite el mismo cliente
                     double saldo = 0;
                     System.out.println("Introduce la cantidad de saldo:");
                     saldo = teclado.nextDouble();
@@ -117,7 +116,7 @@ public class GestionBanco {
                     String oper = teclado.nextLine();
 
                     List<Operacion> listaOpCliente = opdao.seleccionarTipoOperacion(dni, oper);
-                    System.out.println("*Listado de operaciones de " + oper + "del cliente:");
+                    System.out.println("*Listado de operaciones de " + oper + " del cliente:");
                     it = listaOpCliente.listIterator();
                     while (it.hasNext()) {
                         System.out.println(it.next());
@@ -140,8 +139,8 @@ public class GestionBanco {
                         System.out.println("-9. SALIR");
                         op = teclado.nextInt();
                         teclado.nextLine();
-                        switch (opcion) {
-                            case 1:
+                        switch (op) {
+                            case 1: //si va
                                 interesado = new Interesado();
                                 System.out.println("Dni:");
                                 interesado.setDni(teclado.nextLine());
@@ -167,6 +166,8 @@ public class GestionBanco {
                                 System.out.println("Dirección:");
                                 cliente.setDireccion(teclado.nextLine());
                                 System.out.println("Fecha de nacimiento(yyyy-mm-dd):");
+                                //ERROR EN FECHA: SE PONE FECHA ACTUAL                                
+                                Date date = new Date();
                                 String fechaNac = teclado.nextLine();
                                 fechaNac = simpleDateFormat.format(date);
                                 java.sql.Date fechaN = java.sql.Date.valueOf(fechaNac);
@@ -191,8 +192,31 @@ public class GestionBanco {
                                 Double saldoInicial = teclado.nextDouble(); 
                                 teclado.nextLine();
                                 cuenta = new Cuenta(alias, saldoInicial, dni); 
+                                cudao.insertar(cuenta);
                                 break;
                             case 4:
+                                System.out.println("-LISTADO DE CLIENTES:");
+                                it = listaClientes.listIterator();
+                                while (it.hasNext()) {
+                                    System.out.println(it.next());
+                                }
+                                System.out.println("Introduzca el dni del cliente de interés:");
+                                dni = teclado.nextLine();
+                                
+                                List<Cuenta> listaCuentasCliente = cudao.seleccionarCuentasCliente(dni);
+                                it = listaCuentasCliente.listIterator();
+                                while (it.hasNext()) {
+                                    System.out.println(it.next());
+                                }
+                                System.out.println("Introduzca numero de la cuenta de interés:");
+                                String numero = teclado.nextLine();
+
+                                System.out.println("Tipo de operacion(compra con tarjeta, reintegro, cargo en cuenta, abono):");
+                                String tipo = teclado.nextLine();
+                                System.out.println("Cantidad:");
+                                double cantidad = teclado.nextDouble(); teclado.nextLine();
+                                operacion = new Operacion(fechaActual, tipo, cantidad, numero);
+                                opdao.insertar(operacion);
                                 break;
                             case 5:
                                 for (int i = 0; i < listaInteresados.size(); i++) {
@@ -212,18 +236,5 @@ public class GestionBanco {
                     } while (op != 9);
             }
         } while (opcion != 6);
-
-        //DELETE
-        //SELECT
-        ListIterator it = listaClientes.listIterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
-        }
-        it = listaCuentas.listIterator();
-        while (it.hasNext()) {
-            System.out.println(it.next());
-        }
-
     }
-
 }

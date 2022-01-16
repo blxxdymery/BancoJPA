@@ -35,6 +35,15 @@ public class CuentaDAO {
         em.close();
         return listaCuentas;
     }
+    
+    public List<Cuenta> seleccionarCuentasCliente(String dni) {
+        EntityManager em = emf.createEntityManager();
+        Query q2 = em.createNamedQuery("Cuenta.selectCuentasCliente");
+        q2.setParameter(1, dni);
+        List<Cuenta> listaCuentas = (List<Cuenta>) q2.getResultList();
+        em.close();
+        return listaCuentas;
+    }
 
     public void insertar(Cuenta cuenta) {
         EntityManager em = emf.createEntityManager();
@@ -63,9 +72,9 @@ public class CuentaDAO {
     
     public double mediaSaldoCliente(String dni) {
         EntityManager em = emf.createEntityManager();
-        Query q1 = em.createNamedQuery("Cuenta.mediaSaldoCliente");
-        q1.setParameter(1, dni);
-        double saldoMedio = (double) q1.getFirstResult();
+        Query q3 = em.createNamedQuery("Cuenta.mediaSaldoCliente");
+        q3.setParameter(1, dni);
+        double saldoMedio = (double) q3.getSingleResult();
         em.close();
         return saldoMedio;
     }

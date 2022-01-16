@@ -31,6 +31,7 @@ public class Operacion implements Serializable{
     private int id;
     private Date fecha;
     private String tipo;
+    private double cantidad;
     private String numero_cuenta;
     
     //MUCHAS OPERACIONES EN 1 CUENTA
@@ -41,9 +42,10 @@ public class Operacion implements Serializable{
     public Operacion() {
     }
 
-    public Operacion(Date fecha, String tipo, String numero_cuenta) {
+    public Operacion(Date fecha, String tipo, double cantidad, String numero_cuenta) {
         this.fecha = fecha;
         this.tipo = tipo;
+        this.cantidad = cantidad;
         this.numero_cuenta = numero_cuenta;
     }
 
@@ -58,6 +60,10 @@ public class Operacion implements Serializable{
     public String getTipo() {
         return tipo;
     }
+    
+    public double getCantidad() {
+        return cantidad;
+    }
 
     public String getNumero_cuenta() {
         return numero_cuenta;
@@ -70,6 +76,10 @@ public class Operacion implements Serializable{
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+    
+    public void setCantidad(double cantidad) {
+        this.cantidad = cantidad;
+    }
 
     public void setNumero_cuenta(String numero_cuenta) {
         this.numero_cuenta = numero_cuenta;
@@ -77,6 +87,6 @@ public class Operacion implements Serializable{
 
     @Override
     public String toString() {
-        return "Operacion{" + "id=" + id + ", fecha=" + fecha + ", tipo=" + tipo + ", numero_cuenta=" + numero_cuenta + '}';
+        return "Operacion{" + "id=" + id + ", fecha=" + fecha + ", tipo=" + tipo + ", cantidad=" + cantidad + ", numero_cuenta=" + numero_cuenta + '}';
     }  
 }

@@ -37,8 +37,7 @@ public class OperacionDAO {
         return listaOperaciones;
     }
 
-    public void insertar(Operacion operacion, Cuenta cuenta) {
-        operacion.setNumero_cuenta(cuenta.getNumero());
+    public void insertar(Operacion operacion) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         tx.begin();
