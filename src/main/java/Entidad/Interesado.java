@@ -6,42 +6,42 @@
 package Entidad;
 
 import java.io.Serializable;
-import java.sql.Date;
 import javax.persistence.*;
 
 /**
  *
  * @author marolt
  */
-@Entity(name="interesados")
+@Entity(name = "interesados")
 //@NamedQuery(name = "Cliente.insertCliente",query="INSERT c INTO clientes c (c.dni, c.nombre, c.apellidos, c.fechaNacimiento, c.email) VALUES (:?1,:?2,:?3,:?4,:?5)")
-
 
 @NamedQueries({
     //QUERY 1: Nombre de todos clientes potenciales que finalmente no se han hecho clientes
-    @NamedQuery(name = "Interesado.noCliente", query = "select i.nombre from interesados i where i.nombre not in (select c.nombre from clientes c)"),
+    @NamedQuery(name = "Interesado.noCliente", query = "select concat(i.nombre, ' ', i.apellidos) from interesados i where i.nombre not in (select c.nombre from clientes c)"),
     @NamedQuery(name = "Interesado.selectInteresado", query = "SELECT i FROM interesados i")
-    
+
 })
-@Table (name="interesados")
-public class Interesado implements Serializable{
-    private static final long SerialVersionUID=1L;
+@Table(name = "interesados")
+public class Interesado implements Serializable {
+
+    private static final long SerialVersionUID = 1L;
     @Id
     private String dni;
     private String nombre;
+    private String apellidos;
     private String email;
     private String motivo;
 
     /*@OneToMany
     @PrimaryKeyJoinColumn(name="id")
     private Transaccion transaccion;*/
-
     public Interesado() {
     }
 
-    public Interesado(String dni, String nombre, String email, String motivo) {
+    public Interesado(String dni, String nombre, String apellidos, String email, String motivo) {
         this.dni = dni;
         this.nombre = nombre;
+        this.apellidos = apellidos;
         this.email = email;
         this.motivo = motivo;
     }
@@ -52,6 +52,10 @@ public class Interesado implements Serializable{
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public void setApellidos(String apellidos) {
+        this.apellidos = apellidos;
     }
 
     public void setEmail(String email) {
@@ -70,6 +74,10 @@ public class Interesado implements Serializable{
         return nombre;
     }
 
+    public String getApellidos() {
+        return apellidos;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -80,6 +88,7 @@ public class Interesado implements Serializable{
 
     @Override
     public String toString() {
-        return "Interesado{" + "dni=" + dni + ", nombre=" + nombre + ", email=" + email + ", motivo=" + motivo + '}';
-    } 
+        return "Interesado{" + "dni=" + dni + ", nombre=" + nombre + ", apellidos=" + apellidos + ", email=" + email + ", motivo=" + motivo + '}';
+    }
+
 }

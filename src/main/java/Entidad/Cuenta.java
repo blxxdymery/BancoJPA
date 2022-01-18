@@ -6,21 +6,21 @@
 package Entidad;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Random;
 import javax.persistence.*;
 
-@Entity(name="cuentas")
+@Entity(name = "cuentas")
 
 @NamedQueries({
-    @NamedQuery(name = "Cuenta.selectCuentas",query="SELECT c FROM cuentas c"),
-    @NamedQuery(name = "Cuenta.selectCuentasCliente",query="SELECT c FROM cuentas c WHERE c.dni_cliente=?1"),
+    @NamedQuery(name = "Cuenta.selectCuentas", query = "SELECT c FROM cuentas c"),
+    @NamedQuery(name = "Cuenta.selectCuentasCliente", query = "SELECT c FROM cuentas c WHERE c.dni_cliente=?1"),
     //QUERY 2 = Saldo medio de las cuentas para un cliente determinado
-    @NamedQuery(name = "Cuenta.mediaSaldoCliente", query = "SELECT AVG(c.saldoActual) FROM cuentas c WHERE c.dni_cliente=?1") 
+    @NamedQuery(name = "Cuenta.mediaSaldoCliente", query = "SELECT AVG(c.saldoActual) FROM cuentas c WHERE c.dni_cliente=?1")
 })
-@Table (name="cuentas")
-public class Cuenta implements Serializable{
-    private static final long SerialVersionUID=1L;
+@Table(name = "cuentas")
+public class Cuenta implements Serializable {
+
+    private static final long SerialVersionUID = 1L;
     @Id
     //@GeneratedValue(strategy=GenerationType.IDENTITY)
     private String numero;
@@ -29,10 +29,10 @@ public class Cuenta implements Serializable{
     private double saldoRetenido;
     private double saldoMinimo;
     private String dni_cliente;
-    
+
     //MUCHAS CUENTAS A 1 CLIENTE
-    @ManyToOne(targetEntity=Entidad.Cliente.class, cascade = CascadeType.PERSIST) //, mappedBy = "ewallets"
-    @PrimaryKeyJoinColumn(name="dni_cliente")
+    @ManyToOne(targetEntity = Entidad.Cliente.class, cascade = CascadeType.PERSIST) //, mappedBy = "ewallets"
+    @PrimaryKeyJoinColumn(name = "dni_cliente")
     private Cliente titular;
 
     public Cuenta() {
@@ -54,8 +54,6 @@ public class Cuenta implements Serializable{
         saldoMinimo = 5;
         this.dni_cliente = dni_cliente;
     }
-    
-    
 
     public Cuenta(String alias, double saldoActual, double saldoRetenido, double saldoMinimo, String dni_cliente) {
         numero = generarNumero();
@@ -118,8 +116,12 @@ public class Cuenta implements Serializable{
     public String toString() {
         return "Cuenta{" + "numero=" + numero + ", alias=" + alias + ", saldoActual=" + saldoActual + ", saldoRetenido=" + saldoRetenido + ", saldoMinimo=" + saldoMinimo + ", dni_cliente=" + dni_cliente + '}';
     }
-    
-    //HACER UN METODO PARA GENERAR UN NUMERO RANDOM DE 20 CIFRAS    
+
+    /**
+     * Método que genera un número de cuenta de 20 cifras
+     *
+     * @return devuelve el número en String
+     */
     public String generarNumero() {
         char[] chars = "0123456789".toCharArray();
         StringBuilder sb = new StringBuilder(20);
@@ -131,5 +133,5 @@ public class Cuenta implements Serializable{
         String output = sb.toString();
         return output;
     }
-    
+
 }

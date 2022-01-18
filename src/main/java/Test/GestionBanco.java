@@ -35,7 +35,6 @@ public class GestionBanco {
         Operacion operacion = null;
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        
 
         //GET FECHA ACTUAL PARA OPERACIONES
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -85,7 +84,7 @@ public class GestionBanco {
                     }
                     double saldoMedio = cudao.mediaSaldoCliente(dni);
                     //VA MAL DA 0
-                    System.out.println("*Saldo medio del cliente " + cliente.getNombre() + ": " + saldoMedio);
+                    System.out.println("*Saldo medio del cliente " + cliente.getNombre() + " " + cliente.getApellidos() + ": " + saldoMedio);
                     System.out.println();
                     break;
                 case 3:
@@ -146,6 +145,8 @@ public class GestionBanco {
                                 interesado.setDni(teclado.nextLine());
                                 System.out.println("Nombre:");
                                 interesado.setNombre(teclado.nextLine());
+                                System.out.println("Apellidos:");
+                                interesado.setApellidos(teclado.nextLine());
                                 System.out.println("Email:");
                                 interesado.setEmail(teclado.nextLine());
                                 System.out.println("Motivo:");
@@ -159,6 +160,8 @@ public class GestionBanco {
                                 cliente.setDni(teclado.nextLine());
                                 System.out.println("Nombre:");
                                 cliente.setNombre(teclado.nextLine());
+                                System.out.println("Apellidos:");
+                                cliente.setApellidos(teclado.nextLine());
                                 System.out.println("Email:");
                                 cliente.setEmail(teclado.nextLine());
                                 System.out.println("Motivo:");
@@ -185,13 +188,13 @@ public class GestionBanco {
                                 }
                                 System.out.println("Introduzca el dni del cliente de interés:");
                                 dni = teclado.nextLine();
-                                
+
                                 System.out.println("Alias:");
                                 String alias = teclado.nextLine();
                                 System.out.println("Saldo inicial:");
-                                Double saldoInicial = teclado.nextDouble(); 
+                                Double saldoInicial = teclado.nextDouble();
                                 teclado.nextLine();
-                                cuenta = new Cuenta(alias, saldoInicial, dni); 
+                                cuenta = new Cuenta(alias, saldoInicial, dni);
                                 cudao.insertar(cuenta);
                                 break;
                             case 4:
@@ -202,7 +205,7 @@ public class GestionBanco {
                                 }
                                 System.out.println("Introduzca el dni del cliente de interés:");
                                 dni = teclado.nextLine();
-                                
+
                                 List<Cuenta> listaCuentasCliente = cudao.seleccionarCuentasCliente(dni);
                                 it = listaCuentasCliente.listIterator();
                                 while (it.hasNext()) {
@@ -214,24 +217,79 @@ public class GestionBanco {
                                 System.out.println("Tipo de operacion(compra con tarjeta, reintegro, cargo en cuenta, abono):");
                                 String tipo = teclado.nextLine();
                                 System.out.println("Cantidad:");
-                                double cantidad = teclado.nextDouble(); teclado.nextLine();
+                                double cantidad = teclado.nextDouble();
+                                teclado.nextLine();
                                 operacion = new Operacion(fechaActual, tipo, cantidad, numero);
                                 opdao.insertar(operacion);
                                 break;
                             case 5:
+                                System.out.println("-LISTADO DE CLIENTES POTENCIALES:");
+                                it = listaInteresados.listIterator();
+                                while (it.hasNext()) {
+                                    System.out.println(it.next());
+                                }
+                                System.out.println("Introduzca el dni del cliente potencial a borrar:");
+                                dni = teclado.nextLine();
                                 for (int i = 0; i < listaInteresados.size(); i++) {
-                                    if (listaInteresados.get(i).getDni().equals("54367325G")) {
+                                    if (listaInteresados.get(i).getDni().equals(dni)) {
                                         intdao.eliminar(listaInteresados.get(i));
                                     }
                                 }
                                 break;
                             case 6:
+                                //VA BIEN EL ON DELETE CASCADE
+                                System.out.println("-LISTADO DE CLIENTES:");
+                                it = listaClientes.listIterator();
+                                while (it.hasNext()) {
+                                    System.out.println(it.next());
+                                }
+                                System.out.println("Introduzca el dni del cliente a borrar:");
+                                dni = teclado.nextLine();
+                                for (int i = 0; i < listaClientes.size(); i++) {
+                                    if (listaClientes.get(i).getDni().equals(dni)) {
+                                        clidao.eliminar(listaClientes.get(i));
+                                    }
+                                }
                                 break;
                             case 7:
+                                System.out.println("-LISTADO DE CLIENTES:");
+                                it = listaClientes.listIterator();
+                                while (it.hasNext()) {
+                                    System.out.println(it.next());
+                                }
+                                System.out.println("Introduzca el dni del cliente de la cuenta:");
+                                dni = teclado.nextLine();
+
+                                listaCuentasCliente = cudao.seleccionarCuentasCliente(dni);
+                                it = listaCuentasCliente.listIterator();
+                                while (it.hasNext()) {
+                                    System.out.println(it.next());
+                                }
+                                System.out.println("Introduzca numero de la cuenta a borrar:");
+                                numero = teclado.nextLine();
+
+                                for (int i = 0; i < listaCuentas.size(); i++) {
+                                    if (listaCuentas.get(i).getNumero().equals(numero)) {
+                                        cudao.eliminar(listaCuentas.get(i));
+                                    }
+                                }
                                 break;
                             case 8:
-                                break;
+                                System.out.println("-LISTADO DE OPERACIONES:");
+                                it = listaOperaciones.listIterator();
+                                while (it.hasNext()) {
+                                    System.out.println(it.next());
+                                }
+                                System.out.println("Introduzca el id de la operacion a borrar:");
+                                int id = teclado.nextInt();
+                                teclado.nextLine();
 
+                                for (int i = 0; i < listaOperaciones.size(); i++) {
+                                    if (listaOperaciones.get(i).getId() == id) {
+                                        opdao.eliminar(listaOperaciones.get(i));
+                                    }
+                                }
+                                break;
                         }
                     } while (op != 9);
             }

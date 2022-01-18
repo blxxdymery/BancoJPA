@@ -20,23 +20,24 @@ import javax.persistence.Table;
  *
  * @author marolt
  */
-@Entity(name="operaciones")
-@Table (name="operaciones")
+@Entity(name = "operaciones")
+@Table(name = "operaciones")
 @NamedQueries({
     @NamedQuery(name = "Operacion.selectOperacionesTipo", query = "SELECT o FROM operaciones o inner join cuentas c on o.numero_cuenta = c.numero WHERE c.dni_cliente = ?1 and o.tipo = ?2"),
-    @NamedQuery(name = "Operacion.selectOperaciones",query="SELECT o FROM operaciones o")
+    @NamedQuery(name = "Operacion.selectOperaciones", query = "SELECT o FROM operaciones o")
 })
-public class Operacion implements Serializable{
+public class Operacion implements Serializable {
+
     @Id
     private int id;
     private Date fecha;
     private String tipo;
     private double cantidad;
     private String numero_cuenta;
-    
+
     //MUCHAS OPERACIONES EN 1 CUENTA
-    @ManyToOne(targetEntity=Entidad.Cuenta.class, cascade = CascadeType.PERSIST)
-    @PrimaryKeyJoinColumn(name="numero_cuenta")
+    @ManyToOne(targetEntity = Entidad.Cuenta.class, cascade = CascadeType.PERSIST)
+    @PrimaryKeyJoinColumn(name = "numero_cuenta")
     private Cuenta cuenta;
 
     public Operacion() {
@@ -60,7 +61,7 @@ public class Operacion implements Serializable{
     public String getTipo() {
         return tipo;
     }
-    
+
     public double getCantidad() {
         return cantidad;
     }
@@ -76,7 +77,7 @@ public class Operacion implements Serializable{
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
-    
+
     public void setCantidad(double cantidad) {
         this.cantidad = cantidad;
     }
@@ -88,5 +89,5 @@ public class Operacion implements Serializable{
     @Override
     public String toString() {
         return "Operacion{" + "id=" + id + ", fecha=" + fecha + ", tipo=" + tipo + ", cantidad=" + cantidad + ", numero_cuenta=" + numero_cuenta + '}';
-    }  
+    }
 }

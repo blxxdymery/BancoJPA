@@ -5,7 +5,6 @@
  */
 package DAO;
 
-import Entidad.Cuenta;
 import Entidad.Operacion;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -21,6 +20,7 @@ import org.apache.logging.log4j.Logger;
  * @author marolt
  */
 public class OperacionDAO {
+
     static Logger log = LogManager.getRootLogger();
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("ClientePU");
     CuentaDAO cuentaDao = new CuentaDAO();
@@ -28,6 +28,11 @@ public class OperacionDAO {
     public OperacionDAO() {
     }
 
+    /**
+     * Método que aplica la query select de las operaciones de la BD
+     *
+     * @return lista de todas las operaciones
+     */
     public List<Operacion> seleccionar() {
         EntityManager em = emf.createEntityManager();
         //EntityTransaction tx = em.getTransaction();
@@ -37,6 +42,11 @@ public class OperacionDAO {
         return listaOperaciones;
     }
 
+    /**
+     * Método que aplica la query de insert operacion a la BD
+     *
+     * @param operacion objeto operacion a insertar
+     */
     public void insertar(Operacion operacion) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
@@ -45,25 +55,36 @@ public class OperacionDAO {
         em.persist(operacion);
         tx.commit();
         log.debug("Objeto persistido correctamente " + operacion);
-        em.close();    
+        em.close();
         //ewDao.update(ewallet, producto, cantidad);
     }
-    
-    public void eliminar(Operacion operacion){
+
+    /**
+     * Método que aplica la query delete de una operación de la BD.
+     *
+     * @param operacion la operacion a eliminar
+     */
+    public void eliminar(Operacion operacion) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        //em.getTransaction().begin();
         tx.begin();
         Operacion operacionEliminar = em.getReference(Operacion.class, operacion.getId());
         log.debug("Objeto a eliminar: " + operacion);
         em.remove(operacionEliminar);
-        //em.getTransaction().commit();
         tx.commit();
         log.debug("Objeto eliminado correctamente " + operacion);
-        em.close(); 
+        em.close();
     }
-    
-    public List<Operacion> seleccionarTipoOperacion(String dni, String tipo){
+
+    /**
+     * Método que aplica la query 4 que devuelve la lista de operaciones de un
+     * tipo concreto de un cliente en específico.
+     *
+     * @param dni dni del cliente
+     * @param tipo tipo de operacion
+     * @return devuelve la lista de operaciones de ese tipo
+     */
+    public List<Operacion> seleccionarTipoOperacion(String dni, String tipo) {
         EntityManager em = emf.createEntityManager();
         Query q1 = em.createNamedQuery("Operacion.selectOperacionesTipo");
         q1.setParameter(1, dni);

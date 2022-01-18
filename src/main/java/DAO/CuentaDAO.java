@@ -5,7 +5,6 @@
  */
 package DAO;
 
-import Entidad.Cliente;
 import Entidad.Cuenta;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -21,12 +20,18 @@ import org.apache.logging.log4j.Logger;
  * @author marolt
  */
 public class CuentaDAO {
+
     static Logger log = LogManager.getRootLogger();
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("ClientePU");
 
     public CuentaDAO() {
     }
 
+    /**
+     * Método que aplica la query select de las cuentas de la BD
+     *
+     * @return lista de todas las cuentas
+     */
     public List<Cuenta> seleccionar() {
         EntityManager em = emf.createEntityManager();
         //EntityTransaction tx = em.getTransaction();
@@ -35,7 +40,12 @@ public class CuentaDAO {
         em.close();
         return listaCuentas;
     }
-    
+
+    /**
+     * Método que aplica una query select de las cuentas de un Cliente concreto
+     *
+     * @return lista de las cuentas del cliente
+     */
     public List<Cuenta> seleccionarCuentasCliente(String dni) {
         EntityManager em = emf.createEntityManager();
         Query q2 = em.createNamedQuery("Cuenta.selectCuentasCliente");
@@ -45,6 +55,11 @@ public class CuentaDAO {
         return listaCuentas;
     }
 
+    /**
+     * Método que aplica la query de insert cuenta a la BD
+     *
+     * @param cuenta objeto cuenta a insertar
+     */
     public void insertar(Cuenta cuenta) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
@@ -53,23 +68,35 @@ public class CuentaDAO {
         em.persist(cuenta);
         tx.commit();
         log.debug("Objeto persistido correctamente " + cuenta);
-        em.close(); 
+        em.close();
     }
-    
-    public void eliminar(Cuenta cuenta){
+
+    /**
+     * Método que aplica la query delete de una cuenta de la BD. Elimina on
+     * cascade todas sus operaciones adyacentes.
+     *
+     * @param cuenta la cuenta a eliminar
+     */
+    public void eliminar(Cuenta cuenta) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        //em.getTransaction().begin();
         tx.begin();
         Cuenta cuentaEliminar = em.getReference(Cuenta.class, cuenta.getNumero());
         log.debug("Objeto a eliminar: " + cuenta);
         em.remove(cuentaEliminar);
-        //em.getTransaction().commit();
         tx.commit();
         log.debug("Objeto eliminado correctamente " + cuenta);
-        em.close(); 
+        log.debug("Operaciones de la cuenta eliminadas correctamente");
+        em.close();
     }
-    
+
+    /**
+     * Método de la query 2 que saca el saldo medio del saldo de todas las
+     * cuentas de un cliente
+     *
+     * @param dni dni del cliente de las cuentas
+     * @return devuelve un double con el saldo medio
+     */
     public double mediaSaldoCliente(String dni) {
         EntityManager em = emf.createEntityManager();
         Query q3 = em.createNamedQuery("Cuenta.mediaSaldoCliente");

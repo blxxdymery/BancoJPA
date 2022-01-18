@@ -5,12 +5,9 @@
  */
 package DAO;
 
-import static DAO.CuentaDAO.log;
 import Entidad.Cliente;
 import Entidad.Cuenta;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.ListIterator;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
@@ -32,17 +29,23 @@ public class ClienteDAO {
     public ClienteDAO() {
     }
 
+    /**
+     * Método que aplica la query select de los clientes de la BD
+     * @return lista de todos los clientes
+     */
     public List<Cliente> seleccionar() {
         EntityManager em = emf.createEntityManager();
-        //EntityTransaction tx = em.getTransaction();
         Query q1 = em.createNamedQuery("Cliente.selectCliente");
         List<Cliente> listaClientes = (List<Cliente>) q1.getResultList();
         em.close();
         return listaClientes;
     }
 
+    /**
+     * Método que aplica la query de insert cliente a la BD
+     * @param cliente objeto cliente a insertar
+     */
     public void insertar(Cliente cliente) {
-        //solo 1 commit para la creación de cliente y ewallet
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         cuenta = new Cuenta(cliente.getDni());
@@ -55,52 +58,30 @@ public class ClienteDAO {
         em.close();
     }
     
-    //IGUAL NO HACE FALTA TANTO LIO CON EL CASCADE
-    public void eliminar(Cliente cliente, List<Cuenta> listaCuentas){
+    /**
+     * Método que aplica la query delete de un cliente de la BD. Elimina on
+     * cascade todas sus cuentas y operaciones adyacentes.
+     *
+     * @param cliente el cliente a eliminar
+     */
+    public void eliminar(Cliente cliente){
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
-        
-        List<Cuenta> cuentasCliente = new ArrayList<>();;
-        String dniCliente = cliente.getDni();
-        
-        tx.begin();
-        Cliente clienteEliminar = em.getReference(Cliente.class, cliente.getDni());
-        Cuenta cuentaEliminar;
-        for (int i = 0; i < listaCuentas.size(); i++) {
-            if (listaCuentas.get(i).getDni_cliente().equals(dniCliente)) {
-                cuentaEliminar = em.getReference(Cuenta.class, listaCuentas.get(i).getNumero());
-                cuentasCliente.add(cuentaEliminar);
-            }
-        }
-        log.debug("Objeto a eliminar: " + cliente);
-        System.out.println("Procedemos a la eliminación de sus cuentas...");
-        ListIterator it = cuentasCliente.listIterator();
-        while(it.hasNext()){
-            em.remove(it.next());
-        }
-        System.out.println("Cuentas eliminadas correctamente");
-        System.out.println("Procedemos a la eliminación del cliente");
-        em.remove(clienteEliminar);
-        tx.commit();
-        log.debug("Objeto eliminado correctamente " + cuenta);
-        em.close(); 
-    }
-    
-    public void eliminarCascade(Cliente cliente){
-        EntityManager em = emf.createEntityManager();
-        EntityTransaction tx = em.getTransaction();
-        //em.getTransaction().begin();
         tx.begin();
         Cliente clienteEliminar = em.getReference(Cliente.class, cliente.getDni());
         log.debug("Objeto a eliminar: " + cliente);
         em.remove(clienteEliminar);
-        //em.getTransaction().commit();
         tx.commit();
-        log.debug("Objeto eliminado correctamente " + cliente + " sus cuentas");
+        log.debug("Objeto eliminado correctamente " + cliente);
+        log.debug("Cuentas y operaciones del cliente eliminadas correctamente");
         em.close(); 
     }
-    
-    //FILTRAR PARA QUE NO SE REPITAN LOS NOMBRES
+
+    /**
+     * Método de la query número 3 que lista las cuentas con más de cierta cantidad de saldo.
+     * @param saldo cantidad de dinero
+     * @return devuelve la lista de nombres de clientes con cuentas con saldo mayor al param saldo
+     */
     public List<String> saldoMayor(double saldo) {
         EntityManager em = emf.createEntityManager();
         Query q1 = em.createNamedQuery("Cliente.clientesSaldoMayor");

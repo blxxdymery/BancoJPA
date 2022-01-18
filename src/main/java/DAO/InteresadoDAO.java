@@ -5,9 +5,6 @@
  */
 package DAO;
 
-import static DAO.CuentaDAO.log;
-import Entidad.Cliente;
-import Entidad.Cuenta;
 import Entidad.Interesado;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -23,12 +20,18 @@ import org.apache.logging.log4j.Logger;
  * @author marolt
  */
 public class InteresadoDAO {
+
     static Logger log = LogManager.getRootLogger();
     EntityManagerFactory emf = Persistence.createEntityManagerFactory("ClientePU");
 
     public InteresadoDAO() {
     }
 
+    /**
+     * Método que aplica la query select de los interesados de la BD
+     *
+     * @return lista de todos los clientes potenciales
+     */
     public List<Interesado> seleccionar() {
         EntityManager em = emf.createEntityManager();
         Query q1 = em.createNamedQuery("Interesado.selectInteresado");
@@ -37,6 +40,11 @@ public class InteresadoDAO {
         return listaInteresados;
     }
 
+    /**
+     * Método que aplica la query de insert interesado a la BD
+     *
+     * @param interesado objeto interesado a insertar
+     */
     public void insertar(Interesado interesado) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
@@ -47,27 +55,38 @@ public class InteresadoDAO {
         log.debug("Objeto persistido correctamente " + interesado);
         em.close();
     }
-    
-    public void eliminar(Interesado interesado){
+
+    /**
+     * Método que aplica la query delete de un interesado de la BD.
+     *
+     * @param interesado el cliente potencial a eliminar
+     */
+    public void eliminar(Interesado interesado) {
         EntityManager em = emf.createEntityManager();
         EntityTransaction tx = em.getTransaction();
         //em.getTransaction().begin();
         tx.begin();
         Interesado interesadoEliminar = em.getReference(Interesado.class, interesado.getDni());
         log.debug("Objeto a eliminar: " + interesado);
-        
+
         em.remove(interesadoEliminar);
         //em.getTransaction().commit();
         tx.commit();
         log.debug("Objeto eliminado correctamente " + interesado);
-        em.close(); 
+        em.close();
     }
-    
-    public List<Interesado> seleccionarNoCliente(){
+
+    /**
+     * Método que aplica la query 1 que saca la lista de interesados que no se
+     * hicieron cliente
+     *
+     * @return devuelve la lista de interesados que no son clientes
+     */
+    public List<Interesado> seleccionarNoCliente() {
         EntityManager em = emf.createEntityManager();
         Query q2 = em.createNamedQuery("Interesado.noCliente");
         List<Interesado> listaNoClientes = (List<Interesado>) q2.getResultList();
         em.close();
         return listaNoClientes;
-    }  
+    }
 }
