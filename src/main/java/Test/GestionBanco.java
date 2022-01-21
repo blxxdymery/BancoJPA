@@ -83,12 +83,11 @@ public class GestionBanco {
                         }
                     }
                     double saldoMedio = cudao.mediaSaldoCliente(dni);
-                    //VA MAL DA 0
                     System.out.println("*Saldo medio del cliente " + cliente.getNombre() + " " + cliente.getApellidos() + ": " + saldoMedio);
                     System.out.println();
                     break;
                 case 3:
-                    //  Se repite el mismo cliente
+                    //  query 3
                     double saldo = 0;
                     System.out.println("Introduce la cantidad de saldo:");
                     saldo = teclado.nextDouble();
@@ -103,6 +102,7 @@ public class GestionBanco {
                     System.out.println();
                     break;
                 case 4:
+                    //  query 4
                     System.out.println("-LISTADO DE CLIENTES:");
                     it = listaClientes.listIterator();
                     while (it.hasNext()) {
@@ -139,7 +139,7 @@ public class GestionBanco {
                         op = teclado.nextInt();
                         teclado.nextLine();
                         switch (op) {
-                            case 1: //si va
+                            case 1: 
                                 interesado = new Interesado();
                                 System.out.println("Dni:");
                                 interesado.setDni(teclado.nextLine());
@@ -154,18 +154,25 @@ public class GestionBanco {
                                 intdao.insertar(interesado);
                                 break;
                             case 2:
-                                //HACER SUBMENU X SI EXISTE EN CLENTES POTENCIALES
+                                Interesado interesado2 = new Interesado();
+                                System.out.println("-LISTADO DE CLIENTES POTENCIALES:");
+                                it = listaInteresados.listIterator();
+                                while (it.hasNext()) {
+                                    System.out.println(it.next());
+                                }
+                                System.out.println("Introduzca el dni del interesado a hacer cliente:");
+                                dni = teclado.nextLine();
+                                for(int i=0;i<listaInteresados.size();i++){
+                                    if(listaInteresados.get(i).getDni().equals(dni)){
+                                        interesado2 = listaInteresados.get(i);
+                                    }
+                                }
                                 cliente = new Cliente();
-                                System.out.println("Dni:");
-                                cliente.setDni(teclado.nextLine());
-                                System.out.println("Nombre:");
-                                cliente.setNombre(teclado.nextLine());
-                                System.out.println("Apellidos:");
-                                cliente.setApellidos(teclado.nextLine());
-                                System.out.println("Email:");
-                                cliente.setEmail(teclado.nextLine());
-                                System.out.println("Motivo:");
-                                cliente.setMotivo(teclado.nextLine());
+                                cliente.setDni(interesado2.getDni());
+                                cliente.setNombre(interesado2.getNombre());
+                                cliente.setApellidos(interesado2.getApellidos());
+                                cliente.setEmail(interesado2.getEmail());
+                                cliente.setMotivo(interesado2.getMotivo());
                                 System.out.println("Dirección:");
                                 cliente.setDireccion(teclado.nextLine());
                                 System.out.println("Fecha de nacimiento(yyyy-mm-dd):");
@@ -237,7 +244,6 @@ public class GestionBanco {
                                 }
                                 break;
                             case 6:
-                                //VA BIEN EL ON DELETE CASCADE
                                 System.out.println("-LISTADO DE CLIENTES:");
                                 it = listaClientes.listIterator();
                                 while (it.hasNext()) {
